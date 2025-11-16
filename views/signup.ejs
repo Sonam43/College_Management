@@ -1,0 +1,233 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Sign Up - College CMS</title>
+  <meta name="description" content="Create your College CMS account to access the platform and manage your academic activities.">
+  
+  <!-- Modern Icons -->
+  <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.js"></script>
+  
+  <!-- Custom CSS -->
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="css/auth.css">
+  
+  <!-- Favicon -->
+  <link rel="icon" type="image/x-icon" href="/css/images/logo.jpg">
+</head>
+<body class="auth-body">
+  <div class="auth-container">
+    <div class="auth-box">
+      <!-- Header -->
+      <div class="auth-header">
+        <div class="auth-logo">
+          <img src="/css/images/logo.jpg" alt="College CMS Logo">
+          <span class="auth-logo-text">College CMS</span>
+        </div>
+        <h2 class="auth-title">Create Account</h2>
+        <p class="auth-subtitle">Join our platform and start your academic journey</p>
+      </div>
+
+      <!-- Alerts -->
+      <% if (typeof error !== 'undefined' && error) { %>
+        <div class="alert alert-danger">
+          <i data-lucide="alert-circle"></i>
+          <%= error %>
+        </div>
+      <% } %>
+
+      <!-- Signup Form -->
+      <form method="POST" action="/signup" class="auth-form">
+        <div class="form-group">
+          <label for="name" class="form-label">
+            <i data-lucide="user"></i>
+            Full Name
+          </label>
+          <input 
+            type="text" 
+            class="form-control" 
+            id="name" 
+            name="name" 
+            placeholder="Enter your full name" 
+            required
+            autocomplete="name"
+          >
+        </div>
+
+        <div class="form-group">
+          <label for="email" class="form-label">
+            <i data-lucide="mail"></i>
+            Email Address
+          </label>
+          <input 
+            type="email" 
+            class="form-control" 
+            id="email" 
+            name="email" 
+            placeholder="Enter your email address" 
+            required
+            autocomplete="email"
+          >
+        </div>
+
+        <div class="form-group password-group">
+          <label for="password" class="form-label">
+            <i data-lucide="lock"></i>
+            Password
+          </label>
+          <input 
+            type="password" 
+            class="form-control" 
+            id="password" 
+            name="password" 
+            placeholder="Create a strong password" 
+            required
+            autocomplete="new-password"
+            minlength="6"
+          >
+          <button type="button" class="password-toggle" id="toggle-password" aria-label="Show password">
+            <i data-lucide="eye"></i>
+          </button>
+        </div>
+
+        <div class="form-group password-group">
+          <label for="confirm-password" class="form-label">
+            <i data-lucide="lock"></i>
+            Confirm Password
+          </label>
+          <input 
+            type="password" 
+            class="form-control" 
+            id="confirm-password" 
+            name="confirmPassword" 
+            placeholder="Confirm your password" 
+            required
+            autocomplete="new-password"
+            minlength="6"
+          >
+          <button type="button" class="password-toggle" id="toggle-confirm-password" aria-label="Show password">
+            <i data-lucide="eye"></i>
+          </button>
+        </div>
+
+        <button type="submit" class="auth-btn btn-success">
+          <i data-lucide="user-plus"></i>
+          Create Account
+        </button>
+      </form>
+
+      <!-- Footer -->
+      <div class="auth-footer">
+        <p>Already have an account? 
+          <a href="/login" class="auth-link">Sign In</a>
+        </p>
+        <p>
+          By creating an account, you agree to our 
+          <a href="/terms" class="auth-link">Terms of Service</a> and 
+          <a href="/privacy" class="auth-link">Privacy Policy</a>
+        </p>
+      </div>
+    </div>
+  </div>
+
+  <!-- JavaScript for enhanced interactions -->
+  <script>
+    // Initialize Lucide icons
+    lucide.createIcons();
+    
+    // Add loading state to form submission
+    document.querySelector('.auth-form').addEventListener('submit', function() {
+      const submitBtn = this.querySelector('.auth-btn');
+      submitBtn.classList.add('loading');
+      submitBtn.disabled = true;
+    });
+    
+    // Password confirmation validation
+    const passwordInput = document.getElementById('password');
+    const confirmPasswordInput = document.getElementById('confirm-password');
+    
+    function validatePasswordMatch() {
+      if (passwordInput.value !== confirmPasswordInput.value) {
+        confirmPasswordInput.setCustomValidity('Passwords do not match');
+        confirmPasswordInput.style.borderColor = 'rgba(239, 68, 68, 0.5)';
+      } else {
+        confirmPasswordInput.setCustomValidity('');
+        confirmPasswordInput.style.borderColor = 'rgba(255, 255, 255, 0.2)';
+      }
+    }
+    
+    passwordInput.addEventListener('input', validatePasswordMatch);
+    confirmPasswordInput.addEventListener('input', validatePasswordMatch);
+    
+    // Add focus effects to form controls
+    document.querySelectorAll('.form-control').forEach(control => {
+      control.addEventListener('focus', function() {
+        this.parentElement.classList.add('focused');
+      });
+      
+      control.addEventListener('blur', function() {
+        this.parentElement.classList.remove('focused');
+      });
+    });
+    
+    // Wire up password toggles
+    function wireToggle(btnId, inputId) {
+      const btn = document.getElementById(btnId);
+      const input = document.getElementById(inputId);
+      btn.addEventListener('click', function() {
+        const isPassword = input.type === 'password';
+        input.type = isPassword ? 'text' : 'password';
+        this.setAttribute('aria-label', isPassword ? 'Hide password' : 'Show password');
+        this.innerHTML = isPassword ? '<i data-lucide="eye-off"></i>' : '<i data-lucide="eye"></i>';
+        lucide.createIcons();
+      });
+    }
+    wireToggle('toggle-password', 'password');
+    wireToggle('toggle-confirm-password', 'confirm-password');
+    
+    // Password strength indicator
+    const passwordStrength = document.createElement('div');
+    passwordStrength.className = 'password-strength';
+    passwordStrength.style.cssText = `
+      margin-top: 8px;
+      font-size: 12px;
+      color: rgba(255, 255, 255, 0.7);
+    `;
+    
+    passwordInput.parentElement.appendChild(passwordStrength);
+    
+    passwordInput.addEventListener('input', function() {
+      const password = this.value;
+      let strength = 0;
+      let message = '';
+      
+      if (password.length >= 6) strength++;
+      if (password.match(/[a-z]/)) strength++;
+      if (password.match(/[A-Z]/)) strength++;
+      if (password.match(/[0-9]/)) strength++;
+      if (password.match(/[^a-zA-Z0-9]/)) strength++;
+      
+      switch (strength) {
+        case 0:
+        case 1:
+          message = 'Weak password';
+          passwordStrength.style.color = 'rgba(239, 68, 68, 0.8)';
+          break;
+        case 2:
+        case 3:
+          message = 'Medium password';
+          passwordStrength.style.color = 'rgba(245, 158, 11, 0.8)';
+          break;
+        case 4:
+        case 5:
+          message = 'Strong password';
+          passwordStrength.style.color = 'rgba(34, 197, 94, 0.8)';
+          break;
+      }
+      
+      passwordStrength.textContent = message;
+    });
+  </script>
+</body>
+</html>

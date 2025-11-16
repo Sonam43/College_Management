@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Email Verification - College CMS</title>
+  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="css/auth.css">
+  <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.js"></script>
+  <style>
+    .verification-container {
+      max-width: 500px;
+      margin: var(--space-16) auto;
+      padding: var(--space-4);
+    }
+    .verification-box {
+      background: var(--bg-primary);
+      padding: var(--space-10);
+      border-radius: var(--radius-2xl);
+      box-shadow: var(--shadow-xl);
+      text-align: center;
+      border: 1px solid var(--border-light);
+    }
+    .success-icon {
+      font-size: 4rem;
+      color: var(--success-500);
+      margin-bottom: var(--space-6);
+      display: block;
+    }
+    .error-icon {
+      font-size: 4rem;
+      color: var(--error-500);
+      margin-bottom: var(--space-6);
+      display: block;
+    }
+    .verification-box h2 {
+      font-family: 'Poppins', sans-serif;
+      color: var(--text-primary);
+      margin-bottom: var(--space-4);
+      font-size: var(--text-3xl);
+      font-weight: var(--font-bold);
+    }
+    .verification-box p {
+      color: var(--text-secondary);
+      margin-bottom: var(--space-6);
+      font-size: var(--text-lg);
+      line-height: 1.6;
+    }
+    .btn-verify {
+      background: linear-gradient(135deg, var(--primary-500), var(--primary-600));
+      color: var(--text-inverse);
+      padding: var(--space-4) var(--space-6);
+      border-radius: var(--radius-lg);
+      text-decoration: none;
+      display: inline-block;
+      margin: var(--space-2);
+      font-weight: var(--font-semibold);
+      transition: all var(--transition-fast);
+      box-shadow: var(--shadow-sm);
+    }
+    .btn-verify:hover {
+      background: linear-gradient(135deg, var(--primary-600), var(--primary-700));
+      transform: translateY(-2px);
+      box-shadow: var(--shadow-md);
+    }
+  </style>
+</head>
+<body class="auth-body">
+  <div class="verification-container">
+    <div class="verification-box">
+      <% if (verified) { %>
+        <i data-lucide="check-circle" class="success-icon" style="width: 64px; height: 64px; margin: 0 auto var(--space-6);"></i>
+        <h2>Email Verified Successfully!</h2>
+        <p>Your email has been verified. You can now log in to your account.</p>
+        <a href="/login" class="btn-verify">Go to Login</a>
+      <% } else { %>
+        <i data-lucide="x-circle" class="error-icon" style="width: 64px; height: 64px; margin: 0 auto var(--space-6);"></i>
+        <h2>Verification Failed</h2>
+        <p><%= message || 'Invalid or expired verification link.' %></p>
+        <a href="/signup" class="btn-verify">Sign Up Again</a>
+        <a href="/login" class="btn-verify">Try Login</a>
+      <% } %>
+    </div>
+  </div>
+
+  <script>
+    lucide.createIcons();
+  </script>
+</body>
+</html>

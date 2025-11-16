@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Feedback - Admin</title>
+  <link rel="stylesheet" href="/css/style.css">
+  <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.js"></script>
+  <style>
+    .admin-feedbacks { padding: var(--space-8) 0; }
+    .admin-header {
+      margin-bottom: var(--space-8);
+      padding-bottom: var(--space-6);
+      border-bottom: 1px solid var(--border-light);
+    }
+    .admin-header h1 {
+      font-family: 'Poppins', sans-serif;
+      font-size: var(--text-4xl);
+      font-weight: var(--font-black);
+      color: var(--text-primary);
+      margin-bottom: var(--space-2);
+    }
+    .admin-table-container {
+      background: var(--bg-primary);
+      border: 1px solid var(--border-light);
+      border-radius: var(--radius-2xl);
+      overflow: hidden;
+      box-shadow: var(--shadow-sm);
+    }
+    table { 
+      width: 100%; 
+      border-collapse: collapse; 
+      font-size: var(--text-sm);
+    }
+    thead {
+      background: var(--bg-secondary);
+    }
+    th, td { 
+      padding: var(--space-4); 
+      border-bottom: 1px solid var(--border-light); 
+      text-align: left; 
+      vertical-align: top;
+    }
+    th { 
+      font-family: 'Poppins', sans-serif;
+      font-weight: var(--font-semibold);
+      color: var(--text-primary);
+      font-size: var(--text-sm);
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+    tbody tr { transition: background var(--transition-fast); }
+    tbody tr:hover { background: var(--bg-secondary); }
+    .actions { display: flex; gap: var(--space-2); align-items: center; }
+    .actions form { display: inline-flex; gap: var(--space-2); align-items: center; }
+    .actions input, .actions select, .actions textarea {
+      padding: var(--space-2) var(--space-3);
+      border: 1px solid var(--border-light);
+      border-radius: var(--radius-md);
+      background: var(--bg-secondary);
+      color: var(--text-primary);
+      font-size: var(--text-sm);
+    }
+    .actions textarea { min-width: 280px; min-height: 60px; }
+    .actions button { padding: var(--space-2) var(--space-4); font-size: var(--text-xs); }
+  </style>
+</head>
+<body>
+  <nav class="navbar" id="navbar">
+    <div class="container nav-container">
+      <a href="/" class="logo">
+        <img src="/css/images/logo.jpg" alt="College FMS Logo">
+        <span>College FMS</span>
+      </a>
+      <ul class="nav-links">
+        <li><a href="/admin">Dashboard</a></li>
+        <li><a href="/admin/complaints">Complaints</a></li>
+        <li><a href="/admin/feedbacks">Feedback</a></li>
+        <li><a href="/logout" class="btn btn-sm btn-ghost">Logout</a></li>
+      </ul>
+    </div>
+  </nav>
+  <div class="container admin-feedbacks">
+    <div class="admin-header">
+      <h1>Feedback Management</h1>
+      <p style="color: var(--text-secondary);">Review, update rating/comments, or delete user feedback</p>
+    </div>
+    <div class="admin-table-container">
+      <table>
+        <thead>
+          <tr>
+            <th>ID</th>
+            <th>Submitted</th>
+            <th>Name</th>
+            <th>Email</th>
+            <th>Rating</th>
+            <th>Comments</th>
+            <th>Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          <% feedbacks.forEach(f => { %>
+            <tr>
+              <td><%= f.id %></td>
+              <td><%= new Date(f.createdAt).toLocaleString() %></td>
+              <td><%= f.name %></td>
+              <td><%= f.email %></td>
+              <td>
+                <form method="POST" action="/admin/feedbacks/<%= f.id %>/update" class="actions">
+                  <select name="rating">
+                    <option value="1" <%= f.rating===1?'selected':'' %>>1</option>
+                    <option value="2" <%= f.rating===2?'selected':'' %>>2</option>
+                    <option value="3" <%= f.rating===3?'selected':'' %>>3</option>
+                    <option value="4" <%= f.rating===4?'selected':'' %>>4</option>
+                    <option value="5" <%= f.rating===5?'selected':'' %>>5</option>
+                  </select>
+              </td>
+              <td>
+                  <textarea name="comments"><%= f.comments %></textarea>
+              </td>
+              <td class="actions">
+                  <a href="/admin/feedbacks/<%= f.id %>" class="btn btn-sm btn-secondary">View</a>
+                  <button type="submit" class="btn btn-sm btn-primary">Save</button>
+                </form>
+                <form method="POST" action="/admin/feedbacks/<%= f.id %>/delete" onsubmit="return confirm('Delete this feedback?');">
+                  <button type="submit" class="btn btn-sm" style="background: var(--error-600); color: white;">Delete</button>
+                </form>
+              </td>
+            </tr>
+          <% }) %>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <footer>
+    <div class="container">
+      <div class="footer-bottom">
+        <p>&copy; 2025 College Facilities & Management System. All rights reserved. Built for education.</p>
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    lucide.createIcons();
+    window.addEventListener('scroll', () => {
+      const navbar = document.getElementById('navbar');
+      if (window.scrollY > 50) {
+        navbar.classList.add('scrolled');
+      } else {
+        navbar.classList.remove('scrolled');
+      }
+    });
+  </script>
+</body>
+</html>
+

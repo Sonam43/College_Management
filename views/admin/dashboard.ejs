@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Admin Dashboard</title>
+  <link rel="stylesheet" href="/css/style.css">
+  <style>
+    .admin { padding: 48px 0; }
+    .cards { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: var(--space-4); }
+    .stat-card { padding: var(--space-6); border: 1px solid var(--border-light); border-radius: var(--radius-2xl); background: var(--bg-primary); box-shadow: var(--shadow-sm); transition: transform var(--transition-fast), box-shadow var(--transition-fast); display: flex; flex-direction: column; gap: var(--space-2); }
+    .stat-card:hover { transform: translateY(-4px); box-shadow: var(--shadow-md); }
+    .stat-title { font-family: 'Poppins', sans-serif; font-weight: var(--font-semibold); color: var(--text-secondary); margin-bottom: 6px; }
+    .stat-value { font-family: 'Poppins', sans-serif; font-weight: var(--font-black); font-size: var(--text-4xl); color: var(--text-primary); }
+    .stat-link { margin-top: auto; align-self: flex-start; }
+    .recent-feedbacks { margin-top: var(--space-8); }
+    .recent-feedbacks h2 { font-family: 'Poppins', sans-serif; font-size: var(--text-2xl); font-weight: var(--font-semibold); margin-bottom: var(--space-2); color: var(--text-primary); }
+    .recent-feedbacks p { color: var(--text-secondary); margin-bottom: var(--space-4); }
+    .recent-feedbacks-table { width: 100%; border-collapse: collapse; font-size: var(--text-sm); }
+    .recent-feedbacks-table thead { background: var(--bg-secondary); }
+    .recent-feedbacks-table th, .recent-feedbacks-table td { padding: var(--space-3); border-bottom: 1px solid var(--border-light); text-align: left; vertical-align: top; }
+    .recent-feedbacks-table th { font-family: 'Poppins', sans-serif; font-weight: var(--font-semibold); color: var(--text-primary); text-transform: uppercase; letter-spacing: 0.05em; font-size: var(--text-xs); }
+    .recent-feedbacks-table td.comments { max-width: 320px; }
+    .recent-feedbacks-empty { color: var(--text-secondary); font-style: italic; }
+    .table-scroll { overflow-x: auto; border: 1px solid var(--border-light); border-radius: var(--radius-2xl); background: var(--bg-primary); box-shadow: var(--shadow-sm); }
+  </style>
+  </head>
+<body>
+  <nav class="navbar" id="navbar">
+    <div class="container nav-container">
+      <a href="/" class="logo">
+        <img src="/css/images/logo.jpg" alt="College CMS Logo">
+        <span>College FMS</span>
+      </a>
+      <ul class="nav-links">
+        <li><a href="/admin">Dashboard</a></li>
+        <li><a href="/admin/complaints">Complaints</a></li>
+        <li><a href="/admin/feedbacks">Feedback</a></li>
+        <li><a href="/logout" class="btn btn-sm btn-ghost">Logout</a></li>
+      </ul>
+    </div>
+  </nav>
+  <section class="admin">
+    <div class="container">
+      <div class="card" style="margin-bottom: var(--space-6);">
+        <div class="card-header">
+          <div class="card-title">Admin Dashboard</div>
+          <div class="card-subtitle">Overview of complaint statuses</div>
+        </div>
+        <div class="card-body">
+          <div class="cards">
+            <div class="stat-card">
+              <div class="stat-title">Total Complaints</div>
+              <div class="stat-value"><%= counts.complaints.total %></div>
+            </div>
+            <div class="stat-card">
+              <div class="stat-title">Open Complaints</div>
+              <div class="stat-value"><%= counts.complaints.open %></div>
+            </div>
+            <div class="stat-card">
+              <div class="stat-title">Complaints In Progress</div>
+              <div class="stat-value"><%= counts.complaints.in_progress %></div>
+            </div>
+            <div class="stat-card">
+              <div class="stat-title">Resolved Complaints</div>
+              <div class="stat-value"><%= counts.complaints.resolved %></div>
+            </div>
+            <div class="stat-card">
+              <div class="stat-title">Feedback Submitted</div>
+              <div class="stat-value"><%= counts.feedback.total %></div>
+              <a href="/admin/feedbacks" class="btn btn-sm btn-secondary stat-link">Manage feedback</a>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="recent-feedbacks">
+        <h2>Recent Feedback</h2>
+        <p>Latest submissions from students and staff</p>
+        <% if (recentFeedbacks && recentFeedbacks.length) { %>
+          <div class="table-scroll">
+            <table class="recent-feedbacks-table">
+              <thead>
+                <tr>
+                  <th>ID</th>
+                  <th>Name</th>
+                  <th>Email</th>
+                  <th>Rating</th>
+                  <th>Submitted</th>
+                  <th>Comments</th>
+                  <th></th>
+                </tr>
+              </thead>
+              <tbody>
+                <% recentFeedbacks.forEach(fb => { %>
+                  <tr>
+                    <td>#<%= fb.id %></td>
+                    <td><%= fb.name %></td>
+                    <td><%= fb.email %></td>
+                    <td><%= fb.rating %> / 5</td>
+                    <td><%= new Date(fb.createdAt).toLocaleString() %></td>
+                    <td class="comments"><%= fb.comments %></td>
+                    <td><a href="/admin/feedbacks/<%= fb.id %>" class="btn btn-sm btn-ghost">View</a></td>
+                  </tr>
+                <% }) %>
+              </tbody>
+            </table>
+          </div>
+        <% } else { %>
+          <p class="recent-feedbacks-empty">No feedback has been submitted yet.</p>
+        <% } %>
+      </div>
+    </div>
+  </section>
+  <footer>
+    <div class="container">
+      <div class="footer-bottom">
+        <p>&copy; 2025 College Facilities & Management System. All rights reserved. Built for education.</p>
+      </div>
+    </div>
+  </footer>
+  <script>
+    window.addEventListener('scroll', () => {
+      const navbar = document.getElementById('navbar');
+      if (window.scrollY > 50) {
+        navbar.classList.add('scrolled');
+      } else {
+        navbar.classList.remove('scrolled');
+      }
+    });
+  </script>
+</body>
+</html>
+

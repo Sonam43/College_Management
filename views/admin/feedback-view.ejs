@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title><%= title %></title>
+  <link rel="stylesheet" href="/css/style.css">
+  <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.js"></script>
+  <style>
+    .admin-feedback-view { padding: var(--space-8) 0; }
+    .admin-header {
+      margin-bottom: var(--space-8);
+      padding-bottom: var(--space-6);
+      border-bottom: 1px solid var(--border-light);
+    }
+    .admin-header h1 {
+      font-family: 'Poppins', sans-serif;
+      font-size: var(--text-4xl);
+      font-weight: var(--font-black);
+      color: var(--text-primary);
+      margin-bottom: var(--space-2);
+    }
+    .card {
+      background: var(--bg-primary);
+      border: 1px solid var(--border-light);
+      border-radius: var(--radius-2xl);
+      padding: var(--space-6);
+      box-shadow: var(--shadow-sm);
+      max-width: 900px;
+      margin: 0 auto;
+    }
+    .field { display: flex; gap: var(--space-4); margin-bottom: var(--space-3); }
+    .label { width: 160px; color: var(--text-secondary); font-weight: var(--font-semibold); }
+    .value { color: var(--text-primary); }
+    .actions { display: flex; gap: var(--space-2); margin-top: var(--space-6); }
+  </style>
+</head>
+<body>
+  <nav class="navbar" id="navbar">
+    <div class="container nav-container">
+      <a href="/" class="logo">
+        <img src="/css/images/logo.jpg" alt="College FMS Logo">
+        <span>College FMS</span>
+      </a>
+      <ul class="nav-links">
+        <li><a href="/admin">Dashboard</a></li>
+        <li><a href="/admin/complaints">Complaints</a></li>
+        <li><a href="/admin/feedbacks">Feedback</a></li>
+        <li><a href="/logout" class="btn btn-sm btn-ghost">Logout</a></li>
+      </ul>
+    </div>
+  </nav>
+
+  <div class="container admin-feedback-view">
+    <div class="admin-header">
+      <h1>Feedback #<%= feedback.id %></h1>
+      <p style="color: var(--text-secondary);">Submitted <%= new Date(feedback.createdAt).toLocaleString() %></p>
+    </div>
+    <div class="card">
+      <div class="field"><div class="label">Name</div><div class="value"><%= feedback.name %></div></div>
+      <div class="field"><div class="label">Email</div><div class="value"><%= feedback.email %></div></div>
+      <div class="field"><div class="label">Rating</div><div class="value"><%= feedback.rating %> / 5</div></div>
+      <div class="field"><div class="label">Comments</div><div class="value"><%= feedback.comments %></div></div>
+      <div class="actions">
+        <a href="/admin/feedbacks" class="btn btn-secondary">Back</a>
+        <form method="POST" action="/admin/feedbacks/<%= feedback.id %>/delete" onsubmit="return confirm('Delete this feedback?');">
+          <button type="submit" class="btn" style="background: var(--error-600); color: white;">Delete</button>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <footer>
+    <div class="container">
+      <div class="footer-bottom">
+        <p>&copy; 2025 College Facilities & Management System. All rights reserved. Built for education.</p>
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    lucide.createIcons();
+    window.addEventListener('scroll', () => {
+      const navbar = document.getElementById('navbar');
+      if (window.scrollY > 50) {
+        navbar.classList.add('scrolled');
+      } else {
+        navbar.classList.remove('scrolled');
+      }
+    });
+  </script>
+</body>
+</html>
+

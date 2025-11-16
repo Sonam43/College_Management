@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Login - College FMS</title>
+  <meta name="description" content="Sign in to your College CMS account to access your dashboard and manage your academic activities.">
+  
+  <!-- Modern Icons -->
+  <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.js"></script>
+  
+  <!-- Custom CSS -->
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="css/auth.css">
+  
+  <!-- Favicon -->
+  <link rel="icon" type="image/x-icon" href="/css/images/logo.jpg">
+</head>
+<body class="auth-body">
+  <div class="auth-container">
+    <div class="auth-box">
+      <!-- Header -->
+      <div class="auth-header">
+        <div class="auth-logo">
+          <img src="/css/images/logo.jpg" alt="College CMS Logo">
+          <span class="auth-logo-text">College CMS</span>
+        </div>
+        <h2 class="auth-title">Welcome Back</h2>
+        <p class="auth-subtitle">Sign in to your account to continue</p>
+      </div>
+
+      <!-- Alerts -->
+      <% if (typeof message !== 'undefined' && message) { %>
+        <div class="alert alert-success">
+          <i data-lucide="check-circle"></i>
+          <%= message %>
+        </div>
+      <% } %>
+      <% if (typeof error !== 'undefined' && error) { %>
+        <div class="alert alert-danger">
+          <i data-lucide="alert-circle"></i>
+          <%= error %>
+        </div>
+      <% } %>
+
+      <!-- Login Form -->
+      <form method="POST" action="/login" class="auth-form">
+        <div class="form-group">
+          <label for="role" class="form-label">
+            <i data-lucide="user"></i>
+            Login as
+          </label>
+          <select id="role" name="role" class="form-control" required>
+            <option value="user" selected>Users</option>
+            <option value="admin">Admin</option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label for="email" class="form-label">
+            <i data-lucide="mail"></i>
+            Email Address
+          </label>
+          <input 
+            type="email" 
+            class="form-control" 
+            id="email" 
+            name="email" 
+            placeholder="Enter your email address" 
+            required
+            autocomplete="email"
+          >
+        </div>
+
+        <div class="form-group password-group">
+          <label for="password" class="form-label">
+            <i data-lucide="lock"></i>
+            Password
+          </label>
+          <input 
+            type="password" 
+            class="form-control" 
+            id="password" 
+            name="password" 
+            placeholder="Enter your password" 
+            required
+            autocomplete="current-password"
+          >
+          <button type="button" class="password-toggle" id="toggle-password" aria-label="Show password">
+            <i data-lucide="eye"></i>
+          </button>
+        </div>
+
+        <button type="submit" class="auth-btn">
+          <i data-lucide="log-in"></i>
+          Sign In
+        </button>
+      </form>
+
+      <!-- Footer -->
+      <div class="auth-footer">
+        <p>Don't have an account? 
+          <a href="/signup" class="auth-link">Create Account</a>
+        </p>
+        <p>
+          <a href="/forgot-password" class="auth-link">Forgot Password?</a>
+        </p>
+      </div>
+    </div>
+  </div>
+
+  <!-- JavaScript for enhanced interactions -->
+  <script>
+    // Initialize Lucide icons
+    lucide.createIcons();
+    
+    // Add loading state to form submission
+    document.querySelector('.auth-form').addEventListener('submit', function() {
+      const submitBtn = this.querySelector('.auth-btn');
+      submitBtn.classList.add('loading');
+      submitBtn.disabled = true;
+    });
+    
+    // Add focus effects to form controls
+    document.querySelectorAll('.form-control').forEach(control => {
+      control.addEventListener('focus', function() {
+        this.parentElement.classList.add('focused');
+      });
+      
+      control.addEventListener('blur', function() {
+        this.parentElement.classList.remove('focused');
+      });
+    });
+    
+    // Password visibility toggle wiring
+    const passwordInput = document.getElementById('password');
+    const toggleBtn = document.getElementById('toggle-password');
+    toggleBtn.addEventListener('click', function() {
+      const isPassword = passwordInput.type === 'password';
+      passwordInput.type = isPassword ? 'text' : 'password';
+      this.setAttribute('aria-label', isPassword ? 'Hide password' : 'Show password');
+      this.innerHTML = isPassword ? '<i data-lucide="eye-off"></i>' : '<i data-lucide="eye"></i>';
+      lucide.createIcons();
+    });
+  </script>
+</body>
+</html>

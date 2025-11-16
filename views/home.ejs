@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Home - College CMS</title>
+  <meta name="description" content="College CMS — simple and modern landing page with quick access to key features.">
+  
+  <!-- Modern Icons -->
+  <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.js"></script>
+  
+  <!-- Custom CSS -->
+  <link rel="stylesheet" href="css/style.css">
+  
+  <style>
+    /* Minimal Home Styles */
+    .hero {
+      background: linear-gradient(135deg, rgba(79,70,229,0.70), rgba(15,23,42,0.55));
+      color: #fff;
+      padding: 72px 0;
+      border-bottom: 1px solid var(--border-light);
+    }
+    .hero-title { font-family: 'Poppins', sans-serif; font-size: var(--text-4xl); font-weight: var(--font-black); margin: 0 0 var(--space-2); }
+    .hero-subtitle { color: #e5e7eb; font-size: var(--text-lg); }
+    .hero-actions { display: flex; gap: var(--space-3); margin-top: var(--space-5); flex-wrap: wrap; }
+    .quick-links { padding: 48px 0; background: var(--bg-primary); }
+    .quick-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: var(--space-4); }
+    .quick-card { border: 1px solid var(--border-light); border-radius: var(--radius-xl); padding: var(--space-5); background: var(--bg-secondary); transition: all var(--transition-fast); text-decoration: none; color: var(--text-primary); }
+    .quick-card:hover { transform: translateY(-2px); box-shadow: var(--shadow-md); }
+    .headline { padding: 12px 16px; background: var(--bg-secondary); border: 1px solid var(--border-light); border-radius: var(--radius-lg); color: var(--text-secondary); margin-top: var(--space-6); }
+  </style>
+</head>
+<body>
+  <!-- Modern Navbar -->
+  <nav class="navbar">
+    <div class="container nav-container">
+      <a href="/" class="logo">
+        <img src="/css/images/logo.jpg" alt="College CMS Logo">
+        <span>College FMS</span>
+      </a>
+      <ul class="nav-links">
+        <li><a href="/home">Home</a></li>
+        <li><a href="/about">About</a></li>
+        <li><a href="/redressal">Redressal</a></li>
+        <li><a href="/feedback">Feedback</a></li>
+        <li><a href="/contact">Contact</a></li>
+        <% if (currentUser && currentUser.role === 'admin') { %>
+          <li><a href="/admin" class="btn btn-sm btn-primary">Admin Panel</a></li>
+        <% } %>
+        <% if (currentUser) { %>
+          <li><a href="/logout" class="logout-btn">
+            <i data-lucide="log-out"></i>
+            Logout
+          </a></li>
+        <% } else { %>
+          <li><a href="/login" class="btn btn-primary">Login</a></li>
+          <li><a href="/signup" class="btn btn-secondary">Sign Up</a></li>
+        <% } %>
+      </ul>
+    </div>
+  </nav>
+
+  <!-- Minimal Landing -->
+  <section class="hero">
+    <div class="container">
+      <% if (currentUser) { %>
+        <h1 class="hero-title">Welcome back, <%= currentUser.name %>!</h1>
+      <% } else { %>
+        <h1 class="hero-title">Welcome to College CMS</h1>
+      <% } %>
+      <p class="hero-subtitle">Modern, simple, and fast access to the essentials.</p>
+      <div class="hero-actions">
+        <a href="/redressal" class="btn btn-primary">Submit Complaint</a>
+        <a href="/feedback" class="btn">Give Feedback</a>
+        <a href="/contact" class="btn">Contact Us</a>
+      </div>
+      <div class="headline">Tip: Use the navigation above to explore other sections.</div>
+    </div>
+  </section>
+
+  <% if (typeof recentComplaints !== 'undefined' && recentComplaints && recentComplaints.length > 0) { %>
+  <section class="quick-links" style="background: var(--bg-secondary);">
+    <div class="container">
+      <h2 style="font-family: 'Poppins', sans-serif; font-size: var(--text-3xl); font-weight: var(--font-bold); margin-bottom: var(--space-6); color: var(--text-primary);">Your Recent Complaints</h2>
+      <div class="quick-grid">
+        <% recentComplaints.forEach(function(complaint) { %>
+        <div class="quick-card" style="cursor: default;">
+          <strong style="color: var(--primary-600);"><%= complaint.subject %></strong><br>
+          <small style="color: var(--text-tertiary);"><%= complaint.category %> | <%= complaint.status %></small><br>
+          <p style="margin-top: var(--space-2); color: var(--text-secondary); font-size: var(--text-sm);"><%= complaint.description.substring(0, 80) %>...</p>
+          <small style="color: var(--text-tertiary);"><%= new Date(complaint.createdAt).toLocaleDateString() %></small>
+        </div>
+        <% }); %>
+      </div>
+    </div>
+  </section>
+  <% } %>
+
+  <section class="quick-links">
+    <div class="container">
+      <div class="quick-grid">
+        <a href="/home" class="quick-card">
+          <strong>Home</strong><br>
+          Go to your dashboard and shortcuts.
+        </a>
+        <a href="/about" class="quick-card">
+          <strong>About</strong><br>
+          Learn about the platform and vision.
+        </a>
+        <a href="/redressal" class="quick-card">
+          <strong>Redressal</strong><br>
+          File a complaint and track status.
+        </a>
+        <a href="/feedback" class="quick-card">
+          <strong>Feedback</strong><br>
+          Share suggestions to improve.
+        </a>
+        <a href="/contact" class="quick-card">
+          <strong>Contact</strong><br>
+          Reach out for any assistance.
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- Modern Footer -->
+  <footer>
+    <div class="container">
+      <div class="footer-content">
+        <div class="footer-brand">
+          <a href="/" class="footer-logo">
+            <img src="/css/images/logo.jpg" alt="College CMS Logo">
+            <span>College CMS</span>
+          </a>
+          <p class="footer-description">
+            Empowering educational institutions with modern technology solutions for seamless academic management and student success.
+          </p>
+        </div>
+        
+        <div class="footer-section">
+          <h4>Platform</h4>
+          <ul class="footer-links">
+            <li><a href="/about">About</a></li>
+            <li><a href="/redressal">Redressal</a></li>
+            <li><a href="/feedback">Feedback</a></li>
+            <li><a href="/contact">Contact</a></li>
+          </ul>
+        </div>
+        
+        <div class="footer-section">
+          <h4>Legal</h4>
+          <ul class="footer-links">
+            <li><a href="/privacy">Privacy Policy</a></li>
+            <li><a href="/terms">Terms of Service</a></li>
+          </ul>
+        </div>
+      </div>
+      
+      <div class="footer-bottom">
+        <p>&copy; 2025 College Facilities & Management System. All rights reserved. Built for education.</p>
+      </div>
+    </div>
+  </footer>
+
+  <!-- JavaScript for small UI enhancements -->
+  <script>
+    // Navbar scroll effect
+    window.addEventListener('scroll', () => {
+      const navbar = document.querySelector('.navbar');
+      if (window.scrollY > 50) {
+        navbar.classList.add('scrolled');
+      } else {
+        navbar.classList.remove('scrolled');
+      }
+    });
+
+    // Active nav link highlight
+    (function(){
+      const path = window.location.pathname;
+      document.querySelectorAll('.nav-links a').forEach(a => {
+        if (a.getAttribute('href') === path) {
+          a.classList.add('active');
+        }
+      });
+    })();
+  </script>
