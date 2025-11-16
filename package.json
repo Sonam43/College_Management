@@ -1,7 +1,7 @@
 {
   "name": "college-management",
   "version": "1.0.0",
-  "main": "index.js",
+  "main": "app.js",
   "scripts": {
     "start": "node app.js",
     "dev": "nodemon app.js"
@@ -9,7 +9,7 @@
   "keywords": [],
   "author": "",
   "license": "ISC",
-  "description": "",
+  "description": "College Management backend",
   "dependencies": {
     "bcrypt": "^5.1.0",
     "dotenv": "^16.0.0",
