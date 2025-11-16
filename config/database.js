@@ -1,4 +1,3 @@
-// config/database.js
 const { Sequelize } = require("sequelize");
 
 const sequelize = new Sequelize(process.env.DB_NAME, process.env.DB_USER, process.env.DB_PASSWORD, {
@@ -6,7 +5,7 @@ const sequelize = new Sequelize(process.env.DB_NAME, process.env.DB_USER, proces
   port: process.env.DB_PORT,
   dialect: "postgres",
   dialectOptions: {
-    ssl: { rejectUnauthorized: false } // required for some cloud DBs like Neon
+    ssl: { rejectUnauthorized: false } // critical for Neon
   }
 });
 
